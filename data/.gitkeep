@@ -1,0 +1,11 @@
+# This file keeps the data directory in version control
+# Place your document directories here:
+#
+# data/
+# ├── OfferLetter/
+# │   ├── doc1.pdf
+# │   └── doc2.docx
+# ├── SalaryStructure/
+# │   └── file1.pdf
+# └── <YourSubcategory>/
+#     └── ...

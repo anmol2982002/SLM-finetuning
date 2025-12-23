@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant Client
+    participant FastAPI
+    participant Predictor
+    participant Gemma3
+    
+    Note over Client,Gemma3: Single Document Classification
+    
+    Client->>FastAPI: POST /predict<br/>{"text": "Document..."}
+    FastAPI->>Predictor: predict(text)
+    Predictor->>Predictor: Format Prompt<br/>(Gemma-3 template)
+    Predictor->>Gemma3: Generate(prompt, max_tokens=50)
+    Gemma3-->>Predictor: {"label": "OfferLetter"}
+    Predictor->>Predictor: Parse JSON
+    Predictor-->>FastAPI: {"label": "OfferLetter"}
+    FastAPI-->>Client: 200 OK<br/>{"label": "OfferLetter"}
+    
+    Note over Client,Gemma3: Few-Shot Classification (New Category)
+    
+    Client->>FastAPI: POST /predict_fewshot<br/>{"text": "...", "examples": [...]}
+    FastAPI->>Predictor: predict_few_shot(text, examples)
+    Predictor->>Predictor: Build Few-Shot Prompt
+    Predictor->>Gemma3: Generate(few_shot_prompt)
+    Gemma3-->>Predictor: {"label": "NewCategory"}
+    Predictor-->>FastAPI: {"label": "NewCategory"}
+    FastAPI-->>Client: 200 OK

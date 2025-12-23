@@ -1,0 +1,32 @@
+flowchart LR
+    subgraph Input
+        A[📁 Documents<br/>PDF, DOCX, etc.] 
+    end
+    
+    subgraph "Data Pipeline"
+        B[🔧 Apache Tika<br/>Text Extraction]
+        C[📝 Instruction<br/>Formatter]
+        D[📊 Train/Val/Test<br/>Splits]
+    end
+    
+    subgraph "Training Pipeline"
+        E[🧠 Gemma-3 270M<br/>Base Model<br/>FROZEN]
+        F[🔗 LoRA Adapters<br/>r=16, α=32]
+        G[📈 Trainer<br/>3 epochs]
+    end
+    
+    subgraph "Inference"
+        H[💾 Fine-tuned<br/>Adapters]
+        I[⚡ FastAPI<br/>Server]
+        J[📤 JSON Output<br/>{"label": "..."}]
+    end
+    
+    A --> B --> C --> D
+    D --> G
+    E --> G
+    F --> G
+    G --> H --> I --> J
+    
+    style E fill:#e8f5e9,stroke:#4caf50
+    style F fill:#fff3e0,stroke:#ff9800
+    style J fill:#e3f2fd,stroke:#2196f3

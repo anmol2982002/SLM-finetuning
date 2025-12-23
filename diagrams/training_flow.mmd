@@ -1,0 +1,35 @@
+flowchart TD
+    subgraph "1. Data Preparation"
+        A1[📂 Raw Documents] -->|extract_text.py| A2[📄 extracted.jsonl]
+        A2 -->|prepare_dataset.py| A3[Train/Val/Test Splits]
+        A3 --> A4[label_mapping.json]
+    end
+    
+    subgraph "2. Model Setup"
+        B1[🤗 google/gemma-3-270m] --> B2[Load with<br/>AutoModelForCausalLM]
+        B2 --> B3[Freeze All Weights]
+        B3 --> B4[Apply LoRA<br/>get_peft_model]
+    end
+    
+    subgraph "3. Training Loop"
+        C1[Load train.jsonl] --> C2[InstructionDataset]
+        C2 --> C3[Mask Instruction Tokens]
+        C3 --> C4[Forward Pass]
+        C4 --> C5[Compute Loss<br/>on Response Only]
+        C5 --> C6[Backward Pass<br/>Update LoRA Only]
+        C6 --> C7{Checkpoint?}
+        C7 -->|Yes| C8[Save Adapter]
+        C7 -->|No| C4
+    end
+    
+    subgraph "4. Output"
+        D1[Best Checkpoint] --> D2[Merged Adapter]
+        D2 --> D3[training_config.yaml]
+    end
+    
+    A3 --> C1
+    B4 --> C4
+    C8 --> D1
+    
+    style B3 fill:#e8f5e9,stroke:#4caf50
+    style C5 fill:#fff3e0,stroke:#ff9800

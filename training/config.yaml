@@ -1,0 +1,151 @@
+# =============================================================================
+# Gemma-3 270M Document Classification - Training Configuration
+# =============================================================================
+# Optimized hyperparameters for fine-tuning on document classification
+# with ~200 samples per class (41 classes, ~8000+ total samples)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Model Configuration
+# -----------------------------------------------------------------------------
+# User requested Unsloth version (may be ungated)
+# Use 'unsloth/gemma-3-270m' or 'unsloth/gemma-3-270m-bnb-4bit' if available
+model_name: "unsloth/gemma-3-270m" 
+
+# Output directory for LoRA adapters and checkpoints
+output_dir: "output/lora_adapters"
+
+# -----------------------------------------------------------------------------
+# Data Configuration
+# -----------------------------------------------------------------------------
+# Paths to processed datasets (from prepare_dataset.py)
+train_file: "data/processed/train.jsonl"
+val_file: "data/processed/val.jsonl"
+test_file: "data/processed/test.jsonl"
+
+# Maximum sequence length (tokens)
+# 4096 tokens ≈ 3000 words ≈ 6-8 pages of text
+# Optimal for 1-3 page documents on 20GB GPU with batch_size=1
+# Gemma-3 270M supports up to 8192, but 4096 is the sweet spot
+max_seq_length: 4096
+
+# -----------------------------------------------------------------------------
+# Training Hyperparameters (Optimized for Document Classification)
+# -----------------------------------------------------------------------------
+
+# Batch size per device
+# - Set to 1 to avoid OOM with long sequences
+# - Increase if you have more VRAM
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+
+# Gradient accumulation
+# Effective batch size = per_device_batch * gradient_accumulation
+# With batch=1, use 16 for effective batch of 16
+gradient_accumulation_steps: 16
+
+# Number of training epochs
+# For ~200 samples/class with 41 classes:
+# - 3-5 epochs is typically optimal
+# - More epochs may lead to overfitting
+num_train_epochs: 3
+
+# Learning rate
+# - 2e-4 (0.0002) is standard for LoRA fine-tuning
+# - For document classification, 1e-4 to 3e-4 works well
+# - Lower if you see training instability
+learning_rate: 0.0002
+
+# Learning rate scheduler
+# - "cosine" works best for most tasks
+# - "linear" is more conservative
+lr_scheduler_type: "cosine"
+
+# Warmup ratio (proportion of total steps)
+# - 0.1 (10%) is a good default
+# - Helps with training stability
+warmup_ratio: 0.1
+
+# Weight decay for regularization
+# - 0.01 is standard for transformer fine-tuning
+# - Helps prevent overfitting
+weight_decay: 0.01
+
+# Optimizer
+# - adamw_torch is the standard choice
+optimizer: "adamw_torch"
+
+# -----------------------------------------------------------------------------
+# LoRA Configuration
+# -----------------------------------------------------------------------------
+lora:
+  # Rank (r): dimensionality of the low-rank matrices
+  # - Higher = more capacity, more parameters
+  # - 8-32 is typical for most tasks
+  # - 16 is a good balance for document classification
+  r: 16
+  
+  # Alpha: scaling factor for LoRA weights
+  # - alpha/r determines the effective learning rate
+  # - alpha=2*r is a common choice
+  alpha: 32
+  
+  # Dropout: regularization for LoRA layers
+  # - 0.05-0.1 helps prevent overfitting
+  dropout: 0.05
+  
+  # Target modules: which layers to apply LoRA to
+  # - Attention projections are most important
+  # - Can also include "gate_proj", "up_proj", "down_proj" for MLP
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+
+# -----------------------------------------------------------------------------
+# Memory & Efficiency
+# -----------------------------------------------------------------------------
+
+# Gradient checkpointing
+# - Trades compute for memory
+# - Essential for long sequences
+gradient_checkpointing: true
+
+# Optional: 4-bit quantization (requires bitsandbytes)
+# - Dramatically reduces memory usage
+# - Slight quality trade-off
+# - Set to true if running on limited GPU memory (<16GB)
+use_quantization: false
+
+# DataLoader workers
+# - 0 for CPU (multiprocessing issues)
+# - 2-4 for GPU
+dataloader_num_workers: 0
+
+# -----------------------------------------------------------------------------
+# Logging & Evaluation
+# -----------------------------------------------------------------------------
+
+# Logging frequency
+logging_steps: 10
+
+# Evaluation frequency (in steps)
+# - Set based on training set size
+# - For ~8000 samples with batch=16: ~500 steps/epoch
+eval_steps: 100
+
+# Checkpoint saving frequency
+save_steps: 100
+
+# Maximum checkpoints to keep
+save_total_limit: 3
+
+# Logging destination
+# Options: "none", "tensorboard", "wandb"
+report_to: "none"
+
+# -----------------------------------------------------------------------------
+# Reproducibility
+# -----------------------------------------------------------------------------
+seed: 42
