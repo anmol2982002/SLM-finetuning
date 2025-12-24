@@ -23,8 +23,8 @@
 ### Document Classification Mode
 ![Classification UI](docs/ui_classification.png)
 
-### Chat Mode (Base Model)
-![Chat UI](docs/ui_chat.png)
+### Few-Shot Classification Mode
+![Few-Shot UI](docs/ui_fewshot.png)
 
 ---
 
@@ -199,7 +199,8 @@ gemma-doc-classifier/
 ├── 📂 data/                    # Your documents go here
 ├── 📂 scripts/
 │   ├── extract_text.py         # Tika text extraction
-│   └── prepare_dataset.py      # Dataset preparation
+│   ├── prepare_dataset.py      # Dataset preparation
+│   └── batch_classify.py       # Batch classification CLI
 ├── 📂 training/
 │   ├── config.yaml             # Training hyperparameters
 │   ├── prompts.py              # Prompt templates
@@ -211,6 +212,8 @@ gemma-doc-classifier/
 ├── 📂 inference/
 │   ├── predictor.py            # Core prediction class
 │   └── api.py                  # FastAPI application
+├── 📂 ui/
+│   └── index.html              # Web interface
 ├── 📂 diagrams/                # Architecture diagrams
 ├── requirements.txt
 └── README.md
@@ -373,7 +376,7 @@ Fine-tuned on 41 document categories with ~840 test samples:
 
 ## 🖥️ Web UI
 
-A modern web interface is available for interactive inference.
+A modern, responsive web interface is available for interactive inference.
 
 ### Start the Server
 
@@ -390,8 +393,71 @@ Open [http://localhost:8000](http://localhost:8000) in your browser.
 
 | Mode | Description |
 |------|-------------|
-| **Classification** | Paste document text → Get category prediction |
-| **Chat** | General conversation with base Gemma-3 model |
+| **🏷️ Document Classification** | Classify documents using pre-trained 41 categories |
+| **📚 Few-Shot Classification** | Define custom categories via examples (2-5 examples) |
+
+---
+
+## 📦 Batch Classification CLI
+
+Classify multiple documents from a directory structure using the command-line interface.
+
+### Directory Structure
+
+Organize documents where **subdirectory names = ground truth labels**:
+
+```
+test_data/
+├── OfferLetter/
+│   ├── doc1.txt
+│   └── doc2.txt
+├── SalaryStructure/
+│   └── salary.txt
+└── Contract/
+    └── contract.txt
+```
+
+### Usage
+
+```bash
+python scripts/batch_classify.py \
+    --input_dir ./test_data \
+    --output_file ./results.json \
+    --model_path ./output/lora_adapters/final
+```
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--input_dir`, `-i` | Required | Directory with label subdirectories |
+| `--output_file`, `-o` | `batch_results.json` | Output file path |
+| `--model_path`, `-m` | `output/lora_adapters/final` | LoRA adapter path |
+| `--format`, `-f` | `json` | Output format (`json` or `csv`) |
+| `--no-categories` | False | Don't provide category hints to model |
+
+### Output
+
+The script generates:
+- **Per-file predictions** with ground truth comparison
+- **Per-category accuracy** breakdown
+- **Overall accuracy** summary
+
+Example output:
+```
+============================================================
+CLASSIFICATION SUMMARY
+============================================================
+Total files processed: 50
+Correct predictions:   48
+Overall accuracy:      96.00%
+
+Per-category breakdown:
+  OfferLetter                    15/15 (100.0%)
+  SalaryStructure                18/20 (90.0%)
+  Contract                       15/15 (100.0%)
+============================================================
+```
 
 ---
 

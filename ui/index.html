@@ -23,6 +23,7 @@
             --error: #ef4444;
             --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             --gradient-2: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            --gradient-3: linear-gradient(135deg, #10b981 0%, #059669 100%);
         }
 
         * {
@@ -56,7 +57,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1.5rem;
             position: relative;
             z-index: 1;
         }
@@ -64,7 +65,7 @@
         /* Header */
         header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .logo {
@@ -72,7 +73,8 @@
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
         }
 
         .logo-icon {
@@ -88,7 +90,7 @@
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: clamp(1.25rem, 4vw, 2rem);
             font-weight: 700;
             background: var(--gradient-1);
             -webkit-background-clip: text;
@@ -98,7 +100,7 @@
 
         .subtitle {
             color: var(--text-secondary);
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
             margin-top: 0.5rem;
         }
 
@@ -109,18 +111,20 @@
             background: var(--bg-secondary);
             padding: 0.5rem;
             border-radius: 16px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             border: 1px solid var(--border);
+            flex-wrap: wrap;
         }
 
         .mode-tab {
             flex: 1;
-            padding: 1rem 1.5rem;
+            min-width: 140px;
+            padding: 0.875rem 1rem;
             border: none;
             background: transparent;
             color: var(--text-secondary);
             font-family: inherit;
-            font-size: 0.95rem;
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
             font-weight: 500;
             cursor: pointer;
             border-radius: 12px;
@@ -150,13 +154,7 @@
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 900px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
+            gap: 1.5rem;
         }
 
         /* Cards */
@@ -184,17 +182,18 @@
             align-items: center;
             justify-content: center;
             font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
         .card-title {
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
             font-weight: 600;
         }
 
         /* Text Areas */
         textarea {
             width: 100%;
-            min-height: 250px;
+            min-height: 200px;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -216,6 +215,29 @@
             color: var(--text-muted);
         }
 
+        /* Inputs */
+        input[type="text"] {
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        input[type="text"]::placeholder {
+            color: var(--text-muted);
+        }
+
         /* Buttons */
         .btn {
             padding: 0.875rem 1.5rem;
@@ -230,6 +252,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            min-height: 48px;
         }
 
         .btn-primary {
@@ -255,9 +278,37 @@
             transform: none;
         }
 
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            min-height: 40px;
+        }
+
+        .btn-secondary:hover {
+            color: var(--text-primary);
+            border-color: var(--accent);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--error);
+            border: 1px solid var(--error);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            min-height: 36px;
+        }
+
+        .btn-danger:hover {
+            background: var(--error);
+            color: white;
+        }
+
         /* Result Area */
         .result-area {
-            min-height: 250px;
+            min-height: 200px;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -303,6 +354,7 @@
             border-radius: 50%;
             background: var(--success);
             animation: pulse 2s infinite;
+            flex-shrink: 0;
         }
 
         @keyframes pulse {
@@ -328,7 +380,7 @@
 
         /* Categories Section */
         .categories-section {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
 
         .categories-header {
@@ -336,6 +388,8 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .categories-toggle {
@@ -405,28 +459,121 @@
             }
         }
 
-        /* Chat message styling */
-        .chat-message {
-            padding: 1rem;
+        /* Few-Shot Examples Section */
+        .examples-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .example-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
             border-radius: 12px;
+            padding: 1rem;
+            position: relative;
+            transition: border-color 0.3s ease;
+        }
+
+        .example-item:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .example-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 0.75rem;
         }
 
-        .chat-message.user {
-            background: var(--accent);
-            margin-left: 20%;
+        .example-number {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
         }
 
-        .chat-message.assistant {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            margin-right: 20%;
+        .example-text {
+            min-height: 80px;
+            margin-bottom: 0.75rem;
+        }
+
+        .example-label-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .example-label-row label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .example-label-row input {
+            flex: 1;
+        }
+
+        .add-example-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .add-example-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .add-example-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Dynamic Labels Display */
+        .detected-labels {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .detected-labels-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .detected-labels-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .detected-label {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            margin-top: 3rem;
+            margin-top: 2rem;
             color: var(--text-muted);
             font-size: 0.85rem;
         }
@@ -451,7 +598,7 @@
             border-radius: 20px;
             font-size: 0.8rem;
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .model-badge .dot {
@@ -459,6 +606,73 @@
             height: 6px;
             background: var(--success);
             border-radius: 50%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+                border-radius: 16px;
+            }
+
+            .mode-tabs {
+                flex-direction: column;
+            }
+
+            .mode-tab {
+                width: 100%;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+
+            textarea {
+                min-height: 150px;
+                font-size: 0.85rem;
+            }
+
+            .example-label-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .example-label-row label {
+                margin-bottom: 0.25rem;
+            }
+
+            .btn {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Full-width layout for few-shot mode */
+        .full-width-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .full-width-content .card {
+            width: 100%;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -485,43 +699,105 @@
                 <span class="icon">🏷️</span>
                 Document Classification
             </button>
-            <button class="mode-tab" data-mode="chat" onclick="switchMode('chat')">
-                <span class="icon">💬</span>
-                Chat with LLM
+            <button class="mode-tab" data-mode="fewshot" onclick="switchMode('fewshot')">
+                <span class="icon">📚</span>
+                Few-Shot Classification
             </button>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
+        <!-- Classification Mode Content -->
+        <div id="classifyMode" class="main-content">
             <!-- Input Panel -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-icon" id="inputIcon">📝</div>
-                    <h2 class="card-title" id="inputTitle">Document Text</h2>
+                    <div class="card-icon">📝</div>
+                    <h2 class="card-title">Document Text</h2>
                 </div>
-                <textarea id="inputText"
+                <textarea id="classifyInput"
                     placeholder="Paste your document text here for classification...
 
 Example: 'This Employment Offer Letter confirms your position as Software Engineer at Acme Corp, starting January 15, 2025. Your annual salary will be $120,000...'"></textarea>
-                <button class="btn btn-primary" id="submitBtn" onclick="handleSubmit()">
-                    <span id="btnIcon">🔍</span>
-                    <span id="btnText">Classify Document</span>
-                    <div class="loader" id="loader"></div>
+                <button class="btn btn-primary" id="classifyBtn" onclick="classifyDocument()">
+                    <span id="classifyBtnIcon">🔍</span>
+                    <span id="classifyBtnText">Classify Document</span>
+                    <div class="loader" id="classifyLoader"></div>
                 </button>
             </div>
 
             <!-- Output Panel -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-icon" id="outputIcon">✨</div>
-                    <h2 class="card-title" id="outputTitle">Classification Result</h2>
+                    <div class="card-icon">✨</div>
+                    <h2 class="card-title">Classification Result</h2>
                 </div>
-                <div class="result-area" id="resultArea">
+                <div class="result-area" id="classifyResult">
                     <span class="result-placeholder">Results will appear here...</span>
                 </div>
                 <div class="status-bar">
-                    <span class="status-dot" id="statusDot"></span>
-                    <span id="statusText">Ready</span>
+                    <span class="status-dot" id="classifyStatusDot"></span>
+                    <span id="classifyStatusText">Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Few-Shot Mode Content -->
+        <div id="fewshotMode" class="full-width-content hidden">
+            <!-- Examples Panel -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📚</div>
+                    <h2 class="card-title">Training Examples</h2>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                    Provide examples of documents with their labels. The model will learn from these to classify new
+                    text.
+                </p>
+
+                <div class="examples-container" id="examplesContainer">
+                    <!-- Example items will be added here dynamically -->
+                </div>
+
+                <button class="add-example-btn" id="addExampleBtn" onclick="addExample()">
+                    <span>+ Add Example</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">(max 5)</span>
+                </button>
+
+                <div class="detected-labels" id="detectedLabels">
+                    <div class="detected-labels-title">📋 Labels from your examples:</div>
+                    <div class="detected-labels-list" id="detectedLabelsList">
+                        <span style="color: var(--text-muted); font-style: italic;">Add examples to see labels...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input + Output Row -->
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📝</div>
+                        <h2 class="card-title">Text to Classify</h2>
+                    </div>
+                    <textarea id="fewshotInput"
+                        placeholder="Enter the document text you want to classify based on your examples above..."></textarea>
+                    <button class="btn btn-primary" id="fewshotBtn" onclick="fewshotClassify()">
+                        <span id="fewshotBtnIcon">🔮</span>
+                        <span id="fewshotBtnText">Classify with Examples</span>
+                        <div class="loader" id="fewshotLoader"></div>
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">✨</div>
+                        <h2 class="card-title">Classification Result</h2>
+                    </div>
+                    <div class="result-area" id="fewshotResult">
+                        <span class="result-placeholder">Results will appear here...</span>
+                    </div>
+                    <div class="status-bar">
+                        <span class="status-dot" id="fewshotStatusDot"></span>
+                        <span id="fewshotStatusText">Ready</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -568,11 +844,12 @@ Example: 'This Employment Offer Letter confirms your position as Software Engine
         ];
 
         let currentMode = 'classify';
-        let chatHistory = [];
+        let fewShotExamples = [];
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             populateCategories();
+            addExample(); // Start with one empty example
         });
 
         function populateCategories() {
@@ -597,50 +874,102 @@ Example: 'This Employment Offer Letter confirms your position as Software Engine
                 tab.classList.toggle('active', tab.dataset.mode === mode);
             });
 
-            // Update UI based on mode
-            const inputIcon = document.getElementById('inputIcon');
-            const inputTitle = document.getElementById('inputTitle');
-            const inputText = document.getElementById('inputText');
-            const outputIcon = document.getElementById('outputIcon');
-            const outputTitle = document.getElementById('outputTitle');
-            const btnIcon = document.getElementById('btnIcon');
-            const btnText = document.getElementById('btnText');
+            // Show/hide mode content
+            const classifyMode = document.getElementById('classifyMode');
+            const fewshotMode = document.getElementById('fewshotMode');
             const categoriesSection = document.getElementById('categoriesSection');
 
             if (mode === 'classify') {
-                inputIcon.textContent = '📝';
-                inputTitle.textContent = 'Document Text';
-                inputText.placeholder = 'Paste your document text here for classification...\n\nExample: \'This Employment Offer Letter confirms your position as Software Engineer...\'';
-                outputIcon.textContent = '✨';
-                outputTitle.textContent = 'Classification Result';
-                btnIcon.textContent = '🔍';
-                btnText.textContent = 'Classify Document';
+                classifyMode.classList.remove('hidden');
+                fewshotMode.classList.add('hidden');
                 categoriesSection.style.display = 'block';
             } else {
-                inputIcon.textContent = '💬';
-                inputTitle.textContent = 'Your Message';
-                inputText.placeholder = 'Type your message here...\n\nThe base Gemma-3 model will respond (without classification fine-tuning).';
-                outputIcon.textContent = '🤖';
-                outputTitle.textContent = 'LLM Response';
-                btnIcon.textContent = '📤';
-                btnText.textContent = 'Send Message';
+                classifyMode.classList.add('hidden');
+                fewshotMode.classList.remove('hidden');
                 categoriesSection.style.display = 'none';
             }
-
-            // Clear results and chat history
-            chatHistory = [];
-            resetResult();
         }
 
-        function resetResult() {
-            document.getElementById('resultArea').innerHTML =
-                '<span class="result-placeholder">Results will appear here...</span>';
-            updateStatus('ready', 'Ready');
+        // ==================== Few-Shot Examples Management ====================
+
+        function addExample() {
+            if (fewShotExamples.length >= 5) return;
+
+            const id = Date.now();
+            fewShotExamples.push({ id, document: '', label: '' });
+            renderExamples();
+            updateAddButton();
         }
 
-        function updateStatus(state, text) {
-            const dot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
+        function removeExample(id) {
+            if (fewShotExamples.length <= 1) return;
+            fewShotExamples = fewShotExamples.filter(ex => ex.id !== id);
+            renderExamples();
+            updateAddButton();
+            updateDetectedLabels();
+        }
+
+        function updateExample(id, field, value) {
+            const ex = fewShotExamples.find(e => e.id === id);
+            if (ex) {
+                ex[field] = value;
+                if (field === 'label') {
+                    updateDetectedLabels();
+                }
+            }
+        }
+
+        function renderExamples() {
+            const container = document.getElementById('examplesContainer');
+            container.innerHTML = fewShotExamples.map((ex, index) => `
+                <div class="example-item" data-id="${ex.id}">
+                    <div class="example-header">
+                        <span class="example-number">Example ${index + 1}</span>
+                        ${fewShotExamples.length > 1 ?
+                    `<button class="btn btn-danger" onclick="removeExample(${ex.id})">✕ Remove</button>` :
+                    ''}
+                    </div>
+                    <textarea 
+                        class="example-text" 
+                        placeholder="Enter example document text..."
+                        oninput="updateExample(${ex.id}, 'document', this.value)"
+                    >${ex.document}</textarea>
+                    <div class="example-label-row">
+                        <label>Label:</label>
+                        <input 
+                            type="text" 
+                            placeholder="e.g., Invoice, Contract, Resume..."
+                            value="${ex.label}"
+                            oninput="updateExample(${ex.id}, 'label', this.value)"
+                        />
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateAddButton() {
+            const btn = document.getElementById('addExampleBtn');
+            btn.disabled = fewShotExamples.length >= 5;
+        }
+
+        function updateDetectedLabels() {
+            const labels = [...new Set(fewShotExamples.map(ex => ex.label).filter(l => l.trim()))];
+            const container = document.getElementById('detectedLabelsList');
+
+            if (labels.length === 0) {
+                container.innerHTML = '<span style="color: var(--text-muted); font-style: italic;">Add examples to see labels...</span>';
+            } else {
+                container.innerHTML = labels.map(label =>
+                    `<span class="detected-label">${label}</span>`
+                ).join('');
+            }
+        }
+
+        // ==================== Classification Functions ====================
+
+        function updateStatus(mode, state, text) {
+            const dot = document.getElementById(`${mode}StatusDot`);
+            const statusText = document.getElementById(`${mode}StatusText`);
 
             dot.className = 'status-dot';
             if (state === 'loading') dot.classList.add('loading');
@@ -649,31 +978,35 @@ Example: 'This Employment Offer Letter confirms your position as Software Engine
             statusText.textContent = text;
         }
 
-        async function handleSubmit() {
-            const text = document.getElementById('inputText').value.trim();
+        async function classifyDocument() {
+            const text = document.getElementById('classifyInput').value.trim();
             if (!text) {
-                updateStatus('error', 'Please enter some text');
+                updateStatus('classify', 'error', 'Please enter some text');
                 return;
             }
 
-            const btn = document.getElementById('submitBtn');
-            const loader = document.getElementById('loader');
-            const btnIcon = document.getElementById('btnIcon');
+            const btn = document.getElementById('classifyBtn');
+            const loader = document.getElementById('classifyLoader');
+            const btnIcon = document.getElementById('classifyBtnIcon');
 
-            // Disable button, show loader
             btn.disabled = true;
             loader.classList.add('visible');
             btnIcon.style.display = 'none';
-            updateStatus('loading', currentMode === 'classify' ? 'Classifying...' : 'Generating response...');
+            updateStatus('classify', 'loading', 'Classifying...');
 
             try {
-                if (currentMode === 'classify') {
-                    await classifyDocument(text);
-                } else {
-                    await chatWithLLM(text);
-                }
+                const response = await fetch(`${API_BASE}/predict`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, categories: CATEGORIES, return_raw: false })
+                });
+
+                if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+                const data = await response.json();
+                showClassificationResult('classify', data);
             } catch (error) {
-                showError(error.message);
+                showError('classify', error.message);
             } finally {
                 btn.disabled = false;
                 loader.classList.remove('visible');
@@ -681,41 +1014,60 @@ Example: 'This Employment Offer Letter confirms your position as Software Engine
             }
         }
 
-        async function classifyDocument(text) {
-            const response = await fetch(`${API_BASE}/predict`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text, categories: CATEGORIES })
-            });
-
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
+        async function fewshotClassify() {
+            const text = document.getElementById('fewshotInput').value.trim();
+            if (!text) {
+                updateStatus('fewshot', 'error', 'Please enter text to classify');
+                return;
             }
 
-            const data = await response.json();
-            showClassificationResult(data);
-        }
+            // Validate examples
+            const validExamples = fewShotExamples.filter(ex =>
+                ex.document.trim() && ex.label.trim()
+            );
 
-        async function chatWithLLM(message) {
-            const response = await fetch(`${API_BASE}/chat`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message,
-                    use_lora: false  // Use base model for chat
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
+            if (validExamples.length === 0) {
+                updateStatus('fewshot', 'error', 'Please add at least one complete example');
+                return;
             }
 
-            const data = await response.json();
-            showChatResult(message, data.response);
+            const btn = document.getElementById('fewshotBtn');
+            const loader = document.getElementById('fewshotLoader');
+            const btnIcon = document.getElementById('fewshotBtnIcon');
+
+            btn.disabled = true;
+            loader.classList.add('visible');
+            btnIcon.style.display = 'none';
+            updateStatus('fewshot', 'loading', 'Classifying with your examples...');
+
+            try {
+                const response = await fetch(`${API_BASE}/predict_fewshot`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text,
+                        examples: validExamples.map(ex => ({
+                            document: ex.document,
+                            label: ex.label
+                        }))
+                    })
+                });
+
+                if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+                const data = await response.json();
+                showClassificationResult('fewshot', data);
+            } catch (error) {
+                showError('fewshot', error.message);
+            } finally {
+                btn.disabled = false;
+                loader.classList.remove('visible');
+                btnIcon.style.display = 'inline';
+            }
         }
 
-        function showClassificationResult(data) {
-            const resultArea = document.getElementById('resultArea');
+        function showClassificationResult(mode, data) {
+            const resultArea = document.getElementById(`${mode}Result`);
 
             resultArea.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
@@ -732,27 +1084,11 @@ Example: 'This Employment Offer Letter confirms your position as Software Engine
                 </div>
             `;
 
-            updateStatus('ready', 'Classification complete');
+            updateStatus(mode, 'ready', 'Classification complete');
         }
 
-        function showChatResult(userMessage, assistantResponse) {
-            const resultArea = document.getElementById('resultArea');
-
-            // Show only the current response (not accumulated history)
-            resultArea.innerHTML = `
-                <div style="margin-bottom: 1rem; padding: 0.75rem; background: rgba(99, 102, 241, 0.2); border-radius: 8px; font-size: 0.85rem; color: var(--text-secondary);">
-                    ⚠️ <strong>Note:</strong> This is a 270M model fine-tuned for classification. Chat responses may be limited.
-                </div>
-                <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border);">
-                    ${assistantResponse || '<em style="color: var(--text-muted);">No response generated</em>'}
-                </div>
-            `;
-
-            updateStatus('ready', 'Response received');
-        }
-
-        function showError(message) {
-            const resultArea = document.getElementById('resultArea');
+        function showError(mode, message) {
+            const resultArea = document.getElementById(`${mode}Result`);
             resultArea.innerHTML = `
                 <div style="color: var(--error); padding: 1rem;">
                     <strong>❌ Error:</strong> ${message}
@@ -761,14 +1097,16 @@ Example: 'This Employment Offer Letter confirms your position as Software Engine
                     <code>python -m uvicorn inference.api:app --reload</code></span>
                 </div>
             `;
-            updateStatus('error', 'Request failed');
+            updateStatus(mode, 'error', 'Request failed');
         }
 
         // Allow Ctrl+Enter to submit
-        document.getElementById('inputText').addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'Enter') {
-                handleSubmit();
-            }
+        document.getElementById('classifyInput').addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') classifyDocument();
+        });
+
+        document.getElementById('fewshotInput').addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') fewshotClassify();
         });
     </script>
 </body>
