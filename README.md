@@ -5,6 +5,16 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<div align="center">
+  
+### 🎬 [Watch Demo Video](https://drive.google.com/file/d/1LuXHnyXFUKVy-_Kbq7C7YlGWXs1LkZk9/view?usp=sharing)
+
+*See the classifier in action — document classification & few-shot learning*
+
+</div>
+
+---
+
 ## ✨ Features
 
 - **Prompt-based classification** - Instruction-style fine-tuning
