@@ -28,13 +28,10 @@
 
 ---
 
-## 🖼️ Screenshots
+## 🖼️ UI
 
 ### Document Classification Mode
 ![Classification UI](docs/ui_classification.png)
-
-### Few-Shot Classification Mode
-![Few-Shot UI](docs/ui_fewshot.png)
 
 ---
 
