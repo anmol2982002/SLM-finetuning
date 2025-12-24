@@ -46,25 +46,23 @@ flowchart LR
     
     subgraph Inference
         G --> H[FastAPI Server]
-        H --> I[{"label": "..."}]
+        H --> I[🖥️ Web UI]
+        H --> J[📡 REST API]
+        I --> K[🏷️ Classification]
+        I --> L[📚 Few-Shot]
+        J --> M[Single Predict]
+        J --> N[Batch Predict]
+        J --> O[Few-Shot API]
+    end
+    
+    subgraph Output
+        K --> P["{label: 'OfferLetter'}"]
+        L --> P
+        M --> P
+        N --> Q[Batch Results JSON]
+        O --> P
     end
 ```
-
-### Training Flow
-
-```mermaid
-flowchart TD
-    A[Raw Documents] -->|Tika| B[Extracted Text]
-    B -->|prepare_dataset.py| C[Train/Val/Test JSONL]
-    C --> D{train_lora.py}
-    D --> E[LoRA Config]
-    D --> F[Frozen Gemma-3]
-    E --> G[Training Loop]
-    F --> G
-    G -->|Checkpoints| H[Best Adapter]
-    H -->|evaluate.py| I[Metrics Report]
-```
-
 ---
 
 ## 🚀 Quick Start
